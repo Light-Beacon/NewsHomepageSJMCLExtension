@@ -1,0 +1,11 @@
+{
+  "identifier": "net.bugjump.news.sjmcl-extension",
+  "name": "Minecraft News Extension",
+  "description": "Provides latest Minecraft news on SJMCL",
+  "author": "Nattiden",
+  "version": "0.1.0",
+  "minimalLauncherVersion": "1.0.0-beta.4",
+  "frontend": {
+    "entry": "frontend/index.js"
+  }
+}

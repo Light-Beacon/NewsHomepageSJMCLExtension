@@ -1,0 +1,16 @@
+{
+  "name": "newshomepagesjmclextension",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Minecraft News Extension SJMCL extension project.",
+  "type": "module",
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "bump": "node ./scripts/bump.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.3",
+    "fflate": "^0.8.2",
+    "semver": "^7.7.2"
+  }
+}
