@@ -5,6 +5,7 @@
   "description": "Minecraft News Extension SJMCL extension project.",
   "type": "module",
   "scripts": {
+    "apply": "node ./scripts/apply.mjs",
     "build": "node ./scripts/build.mjs",
     "bump": "node ./scripts/bump.mjs"
   },
