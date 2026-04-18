@@ -9,9 +9,10 @@ export function createMcVersionDetailPage(
   standalone: boolean,
 ) {
   const React = api.React;
-  const { Box, Text, VStack, HStack, Image, Skeleton, IconButton, Icon } =
+  const { Box, Text, VStack, HStack, Image, Skeleton, IconButton, Icon, useColorModeValue} =
     api.ChakraUI;
   const headerImageHeight = "160px";
+  const backButtonSwitchScrollTop = 120;
   const customScrollbarSx = {
     scrollbarWidth: "none",
   };
@@ -25,6 +26,7 @@ export function createMcVersionDetailPage(
     );
     const [loading, setLoading] = React.useState(true);
     const [cancel, setCancel] = React.useState(false);
+    const [backButtonOnImage, setBackButtonOnImage] = React.useState(true);
     const [error, setError] = React.useState(
       null as Record<string, unknown> | null,
     );
@@ -33,6 +35,7 @@ export function createMcVersionDetailPage(
       size: "sm",
       "aria-label": "返回",
       variant: "ghost",
+      /*color: backButtonOnImage ? "blackAlpha.900" : "whiteAlpha.900",*/
       icon: React.createElement(
         Icon,
         { viewBox: "72 72 440 440" },
@@ -215,9 +218,11 @@ export function createMcVersionDetailPage(
         Box,
         {
           position: "fixed",
-          top: "14px",
-          left: "14px",
-          padding: "2px",
+          top: "16px",
+          left: "16px",
+          bg: backButtonOnImage ?  useColorModeValue("whiteAlpha.300", "blackAlpha.300") : undefined,
+          backdropFilter: backButtonOnImage ? "blur(4px)" : undefined,
+          transition: "background-color 0.3s, backdrop-filter 0.3s",
           borderRadius: "md",
           zIndex: 30,
         },
@@ -235,6 +240,10 @@ export function createMcVersionDetailPage(
             overflowY: "auto",
             overflowX: "hidden",
             sx: customScrollbarSx,
+            onScroll: (event: { currentTarget: { scrollTop: number } }) => {
+              const nextOnImage = event.currentTarget.scrollTop < backButtonSwitchScrollTop;
+              setBackButtonOnImage(nextOnImage);
+            },
           },
           getVersionCard(),
         ),
