@@ -1,8 +1,8 @@
 import { backIconPath, creeperIconPath, wikiIconPath } from "../resources/icons";
 import type { ExtensionFactoryApi } from "../types/sjmcl";
-import { parseMarkdown } from "../utils/markdown_parser";
-import { navigate } from "../utils/page_router";
-import { getVersion } from "../utils/news_homepage_api";
+import { parseMarkdown } from "../utils/markdown-parser";
+import { navigate } from "../utils/page-router";
+import { getVersion } from "../utils/news-homepage-api";
 
 export function createMcVersionDetailPage(
   api: ExtensionFactoryApi,
@@ -52,7 +52,7 @@ export function createMcVersionDetailPage(
       VStack,
       {
         position: "sticky",
-        top: "54px",
+        top: "64px",
         zIndex: 20,
         alignSelf: "flex-start",
         ms: "16px",

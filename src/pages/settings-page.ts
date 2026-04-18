@@ -11,12 +11,7 @@ export function createSettingsPage(api: ExtensionFactoryApi) {
       React.createElement(
         Text,
         null,
-        "Hello, this is the setting page of your extension of your extension"
-      ),
-      React.createElement(
-        Text,
-        null,
-        "Hello, this is the setting page 2 of your extension of your extension"
+        "这里还什么都没有呢！"
       )
     );
   };

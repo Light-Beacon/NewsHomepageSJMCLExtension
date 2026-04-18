@@ -1,9 +1,8 @@
 import type { ExtensionFactoryApi } from "./types/sjmcl";
 import { createMcVersionDetailPage } from "./pages/mc-version-detail";
-import { createExamplePage } from "./pages/example-page";
 import { createSettingsPage } from "./pages/settings-page";
 import { createConsoleWidget } from "./widgets/console";
-import { createHomeWidget } from "./widgets/snapshot";
+import { createNewsWidget } from "./widgets/news";
 
 (function registerExampleExtension(factory) {
   const token = document.currentScript?.dataset?.extensionToken || "";
@@ -21,22 +20,13 @@ import { createHomeWidget } from "./widgets/snapshot";
   return {
     homeWidgets: [
       {
-        title: "最新快照版: 26.2-snapshot-2",
-        icon: api.resolveAssetUrl("assets/icons/snapshot.png"),
-        description: "最新快照版",
-        Component: createHomeWidget(api),
-        defaultWidth: 600,
-        minWidth: 300,
-        key: "snapshot-widget",
-      },
-      {
-        title: "最新正式版: 26.1.2",
-        icon: api.resolveAssetUrl("assets/icons/release.png"),
-        description: "最新正式版",
-        Component: createHomeWidget(api),
-        defaultWidth: 600,
-        minWidth: 300,
-        key: "release-widget",
+        title: "新闻主页",
+        icon: api.resolveAssetUrl("assets/icons/news.png"),
+        description: "提供最新的 Minecraft 中文新闻",
+        Component: createNewsWidget(api),
+        defaultWidth: 420,
+        minWidth: 420,
+        key: "news-homepage-widget",
       },
       {
         title: "Tauri 命令行终端",
@@ -54,16 +44,7 @@ import { createHomeWidget } from "./widgets/snapshot";
       {
         routePath: "mcversiondetail",
         Component: createMcVersionDetailPage(api, false),
-      },
-      {
-        routePath: "example",
-        Component: createExamplePage(api, false),
-      }/*,
-      {
-        routePath: "example-standalone",
-        isStandAlone: true,
-        Component: createMcVersionDetailPage(api, true),
-      },*/
+      }
     ],
   };
 });
