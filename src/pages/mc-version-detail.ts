@@ -24,6 +24,7 @@ export function createMcVersionDetailPage(
       null as Record<string, unknown> | null,
     );
     const [loading, setLoading] = React.useState(true);
+    const [cancel, setCancel] = React.useState(false);
     const [error, setError] = React.useState(
       null as Record<string, unknown> | null,
     );
@@ -42,6 +43,7 @@ export function createMcVersionDetailPage(
         }),
       ),
       onClick: function () {
+        setCancel(true);
         navigate(api, "/launch");
       },
     });
@@ -97,8 +99,10 @@ export function createMcVersionDetailPage(
           }
 
           void getVersion(api, version,
-            (data: Record<string, unknown>) => {setVersionData(data); setError(null); setLoading(false);},
-            (err: unknown) => {setVersionData(null); setError({ message: err instanceof Error ? err.message : String(err) }); setLoading(false);}
+            (data: Record<string, unknown>) => {if (!cancel) { 
+              setVersionData(data); setError(null); setLoading(false); }},
+            (err: unknown) => {if (!cancel) { 
+              setVersionData(null); setError({ message: err instanceof Error ? err.message : String(err) }); setLoading(false); }}
           );
         }
         loadMarkdown();
