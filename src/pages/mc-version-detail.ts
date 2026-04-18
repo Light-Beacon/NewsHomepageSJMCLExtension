@@ -2,6 +2,7 @@ import { backIconPath, creeperIconPath, wikiIconPath } from "../resources/icons"
 import type { ExtensionFactoryApi } from "../types/sjmcl";
 import { parseMarkdown } from "../utils/markdown_parser";
 import { navigate } from "../utils/page_router";
+import { getVersion } from "../utils/news_homepage_api";
 
 export function createMcVersionDetailPage(
   api: ExtensionFactoryApi,
@@ -14,8 +15,6 @@ export function createMcVersionDetailPage(
   const customScrollbarSx = {
     scrollbarWidth: "none",
   };
-
-  const apiuri = "https://news.bugjump.net/api/v1/mcversion/version/";
 
   return function McVersionDetailPage() {
     const host = api.getHostContext();
@@ -78,11 +77,8 @@ export function createMcVersionDetailPage(
       );
     }
 
-    React.useEffect(
-      function () {
-        let cancelled = false;
-
-        async function loadMarkdown() {
+    React.useEffect(()=>{
+        function loadMarkdown() {
           setLoading(true);
           setError(null);
 
@@ -93,50 +89,19 @@ export function createMcVersionDetailPage(
             return;
           }
 
-          try {
-            const responseText = await host.actions.requestText(
-              apiuri + version,
-            );
-            const response = JSON.parse(responseText);
-            if (response.status !== 200) {
-              setError({ message: "接口返回错误: " + response.status });
-              setLoading(false);
-              return;
-            }
-
-            if (cancelled) {
-              return;
-            }
-
-            if (typeof response.data?.markdown === "string") {
-              setVersionData(response.data);
-            } else {
-              setVersionData(null);
-              setError({ message: "接口返回值错误" });
-            }
-          } catch (loadError) {
-            if (cancelled) {
-              return;
-            }
-
+          if (typeof version !== "string") {
             setVersionData(null);
-            setError(
-              loadError instanceof Error
-                ? { message: loadError.message }
-                : { message: "获取版本数据失败" },
-            );
-          } finally {
-            if (!cancelled) {
-              setLoading(false);
-            }
+            setError({ message: "查询参数 version 格式错误" });
+            setLoading(false);
+            return;
           }
+
+          void getVersion(api, version,
+            (data: Record<string, unknown>) => {setVersionData(data); setError(null); setLoading(false);},
+            (err: unknown) => {setVersionData(null); setError({ message: err instanceof Error ? err.message : String(err) }); setLoading(false);}
+          );
         }
-
-        void loadMarkdown();
-
-        return function cleanup() {
-          cancelled = true;
-        };
+        loadMarkdown();
       },
       [version],
     );
