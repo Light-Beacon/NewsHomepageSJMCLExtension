@@ -21,14 +21,21 @@ async function api_get(sjmcl_api: ExtensionFactoryApi, path: string) {
     }
 }
 
+const cache: Record<string, unknown> = {};
 async function gernal_api_get(sjmcl_api: ExtensionFactoryApi, path: string, 
     onSuccess?: Function,
-    onError?: Function ) {
+    onError?: Function,
+    useCache = true) {
+    if (useCache && cache[path]) {
+        onSuccess?.(cache[path]);
+        return cache[path];
+    }
     try {
         const data = await api_get(sjmcl_api, path);
         if (onSuccess) {
             onSuccess(data);
         }
+        cache[path] = data;
         return data;
     } catch (error) {
         if (onError) {
@@ -38,12 +45,13 @@ async function gernal_api_get(sjmcl_api: ExtensionFactoryApi, path: string,
     }
 }
 
+
 export async function getLatestVersions(sjmcl_api: ExtensionFactoryApi,
-    onSuccess?: Function, onError?: Function) {
-        return gernal_api_get(sjmcl_api, "mcversion/latest/data", onSuccess, onError);
+    onSuccess?: Function, onError?: Function, useCache = true) {
+        return gernal_api_get(sjmcl_api, "mcversion/latest/data", onSuccess, onError, useCache);
 }
 
 export async function getVersion(sjmcl_api: ExtensionFactoryApi,
-    version: string, onSuccess?: Function, onError?: Function) {
-        return gernal_api_get(sjmcl_api, "mcversion/version/" + version, onSuccess, onError);
+    version: string, onSuccess?: Function, onError?: Function, useCache = true) {
+        return gernal_api_get(sjmcl_api, "mcversion/version/" + version, onSuccess, onError, useCache);
 }

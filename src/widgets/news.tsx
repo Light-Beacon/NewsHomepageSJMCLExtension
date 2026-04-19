@@ -20,7 +20,7 @@ export function createNewsWidget(api: ExtensionFactoryApi) {
       null as Record<string, unknown> | null,
     );
 
-    function loadNews() {
+    function loadNews(useCache = true) {
         setLoading(true);
         setError(null);
 
@@ -42,6 +42,7 @@ export function createNewsWidget(api: ExtensionFactoryApi) {
               setLoading(false);
             }
           },
+          useCache,
         );
       }
 
@@ -61,7 +62,7 @@ export function createNewsWidget(api: ExtensionFactoryApi) {
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
               }}>{error?.message || "未知错误"}</AlertDescription>
-            <RepeatButton action={loadNews} />
+            <RepeatButton action={() => {loadNews(false)}} />
           </Alert>
         </Center>
       );
