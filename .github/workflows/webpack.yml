@@ -1,0 +1,39 @@
+name: Build Extension
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Bump Version
+      run: |
+        grep 'version' package.json | sed -E 's/.*"([0-9.]+)",/\1/'
+        npm bump "$VERSION.dev-${GITHUB_SHA:0:7}"
+
+    - name: Build
+      run:  npm run build
+
+    - name: Upload
+      uses: actions/upload-artifact@v7.0.1
+      with:
+        path: 
+          ./dist/*.sjmclx
+        
