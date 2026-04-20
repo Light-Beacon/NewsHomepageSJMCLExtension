@@ -69,7 +69,7 @@ export function createNewsWidget(api: ExtensionFactoryApi) {
     }
     if (loading) {
       return (
-        <VStack align="stretch" spacing={3} padding="10px">
+        <VStack align="stretch" spacing={3} padding="10px 7px">
           <Skeleton height="80px" borderRadius="md" />
           <Skeleton height="80px" borderRadius="md"/>
         </VStack>
@@ -110,7 +110,7 @@ export function createNewsWidget(api: ExtensionFactoryApi) {
       }
 
       return (
-        <VStack align="stretch" spacing={3} padding="10px">
+        <VStack align="stretch" spacing={3} margin="10px 7px">
           {renderVersionCard(snapshot)}
           {renderVersionCard(release)}
         </VStack>

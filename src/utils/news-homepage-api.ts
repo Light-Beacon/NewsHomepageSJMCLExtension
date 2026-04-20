@@ -12,11 +12,11 @@ async function api_get(sjmcl_api: ExtensionFactoryApi, path: string) {
         host.actions.logger.info("API response:", responseText);
         const response = JSON.parse(responseText);
         if (response.status !== 200) {
-            throw new Error("API error: " + response.status);
+            throw new Error("API 返回值错误: " + response.status);
         }
         return response.data;
     } catch (error) {
-        console.error("API request failed:", error);
+        console.error("API 请求失败:", error);
         throw error;
     }
 }

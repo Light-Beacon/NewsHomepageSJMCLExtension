@@ -24,7 +24,7 @@ import { createNewsWidget } from "./widgets/news";
         description: "提供最新的 Minecraft 中文新闻",
         Component: createNewsWidget(api),
         defaultWidth: 420,
-        minWidth: 420,
+        minWidth: 400,
         key: "news-homepage-widget",
       }
     ],

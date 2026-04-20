@@ -1,4 +1,5 @@
-import { backIconPath, creeperIconPath, wikiIconPath } from "../resources/icons";
+import { creeperIconPath, wikiIconPath } from "../resources/icons";
+import { topBackButtonFactory } from "../components/top-back-button";
 import type { ExtensionFactoryApi } from "../types/sjmcl";
 import { parseMarkdown } from "../utils/markdown-parser";
 import { navigate } from "../utils/page-router";
@@ -9,10 +10,12 @@ export function createMcVersionDetailPage(
   standalone: boolean,
 ) {
   const React = api.React;
-  const { Box, Text, VStack, HStack, Image, Skeleton, IconButton, Icon, useColorModeValue} =
+  const { Box, Text, VStack, HStack, Image, Skeleton, IconButton, Icon } =
     api.ChakraUI;
+  const TopBackButton = topBackButtonFactory(api);
   const headerImageHeight = "160px";
   const backButtonSwitchScrollTop = 120;
+  const backButtonHysteresis = 24;
   const customScrollbarSx = {
     scrollbarWidth: "none",
   };
@@ -27,29 +30,19 @@ export function createMcVersionDetailPage(
     const [loading, setLoading] = React.useState(true);
     const [cancel, setCancel] = React.useState(false);
     const [backButtonOnImage, setBackButtonOnImage] = React.useState(true);
+    const scrollRafRef = React.useRef(null) as { current: number | null };
     const [error, setError] = React.useState(
       null as Record<string, unknown> | null,
     );
 
-    const backButton = React.createElement(IconButton, {
-      size: "sm",
-      "aria-label": "返回",
-      variant: "ghost",
-      /*color: backButtonOnImage ? "blackAlpha.900" : "whiteAlpha.900",*/
-      icon: React.createElement(
-        Icon,
-        { viewBox: "72 72 440 440" },
-        React.createElement("path", {
-          fill: "currentColor",
-          stroke: "currentColor",
-          d: backIconPath,
-        }),
-      ),
-      onClick: function () {
-        setCancel(true);
-        navigate(api, "/launch");
+    React.useEffect(
+      () => () => {
+        if (scrollRafRef.current !== null) {
+          cancelAnimationFrame(scrollRafRef.current);
+        }
       },
-    });
+      [],
+    );
 
     var floatingBackButtons = React.createElement(
       VStack,
@@ -215,18 +208,14 @@ export function createMcVersionDetailPage(
       Box,
       { position: "relative", h: "100%", p: 0 },
       React.createElement(
-        Box,
+        TopBackButton,
         {
-          position: "fixed",
-          top: "16px",
-          left: "16px",
-          bg: backButtonOnImage ?  useColorModeValue("whiteAlpha.300", "blackAlpha.300") : undefined,
-          backdropFilter: backButtonOnImage ? "blur(4px)" : undefined,
-          transition: "background-color 0.3s, backdrop-filter 0.3s",
-          borderRadius: "md",
-          zIndex: 30,
+          onImage: backButtonOnImage,
+          onClick: function () {
+            setCancel(true);
+            navigate(api, "/launch");
+          },
         },
-        backButton,
       ),
       // 主要内容
       React.createElement(
@@ -241,8 +230,19 @@ export function createMcVersionDetailPage(
             overflowX: "hidden",
             sx: customScrollbarSx,
             onScroll: (event: { currentTarget: { scrollTop: number } }) => {
-              const nextOnImage = event.currentTarget.scrollTop < backButtonSwitchScrollTop;
-              setBackButtonOnImage(nextOnImage);
+              const scrollTop = event.currentTarget.scrollTop;
+              if (scrollRafRef.current !== null) {
+                cancelAnimationFrame(scrollRafRef.current);
+              }
+              scrollRafRef.current = requestAnimationFrame(() => {
+                scrollRafRef.current = null;
+                setBackButtonOnImage((prevOnImage: boolean) => {
+                  if (prevOnImage) {
+                    return scrollTop < backButtonSwitchScrollTop + backButtonHysteresis;
+                  }
+                  return scrollTop < backButtonSwitchScrollTop - backButtonHysteresis;
+                });
+              });
             },
           },
           getVersionCard(),
