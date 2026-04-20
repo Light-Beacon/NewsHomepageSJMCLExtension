@@ -40,7 +40,11 @@ export function topBackButtonFactory(api: ExtensionFactoryApi) {
             variant="ghost"
             icon={
               <Icon viewBox="72 72 440 440">
-                <path fill="currentColor" stroke="currentColor" d={backIconPath} />
+                {React.createElement("path", {
+                  fill: "currentColor",
+                  stroke: "currentColor",
+                  d: backIconPath,
+                })}
               </Icon>
             }
             onClick={onClick}
