@@ -11,11 +11,10 @@ export function createMcVersionDetailPage(
   standalone: boolean,
 ) {
   const React = api.React;
-  const { Box, Text, VStack, HStack, Image, Skeleton, IconButton, Icon, Tooltip } =
+  const { Box, Text, VStack, HStack, Image, Skeleton, SkeletonText, IconButton, Icon, Tooltip, Grid, GridItem } =
     api.ChakraUI;
   const TopBackButton = topBackButtonFactory(api);
   const Footer = footerFactory(api);
-  const headerImageHeight = "160px";
   const backButtonSwitchScrollTop = 120;
   const backButtonHysteresis = 24;
   const customScrollbarSx = {
@@ -96,9 +95,8 @@ export function createMcVersionDetailPage(
       viewBox = "0 0 512 512",
     ) {
       return (
-        <Tooltip hasArrow label={tooltip} placement='right'>
+        <Tooltip key={key} hasArrow label={tooltip} placement="left">
             <IconButton
-            key={key}
             size="sm"
             aria-label="返回"
             variant="ghost"
@@ -117,9 +115,76 @@ export function createMcVersionDetailPage(
       );
     }
 
+    function getFloatingButtons()
+    {
+        if (error) { return null }
+        if (loading) { return (
+            <Skeleton height="200px"/>
+        )}
+        if (!versionData) { return null }
+        const floatingButtons: unknown[] = [];
+        const officialLink =
+            typeof versionData["official-link"] === "string"
+            ? versionData["official-link"]
+            : null;
+        if (officialLink) {
+            floatingButtons.push(
+            renderFloatingButton(
+                "official-link",
+                () => host.actions.openExternalLink(officialLink),
+                creeperIconPath,
+                "查看官网更新日志",
+                "124 124 900 900",
+            ),
+            );
+        }
+        const wikiLink =
+            typeof versionData["wiki-link"] === "string"
+            ? versionData["wiki-link"]
+            : null;
+        if (wikiLink) {
+            floatingButtons.push(
+            renderFloatingButton(
+                "wiki-link",
+                () => host.actions.openExternalLink(wikiLink),
+                wikiIconPath,
+                "查看 Minecraft Wiki 上的更新日志",
+                "20 20 512 512",
+            ),
+            );
+        }
+        return floatingButtons;
+    }
+
+    function getHeader() {
+      if (loading) {
+        return <Skeleton height="100%"/>;
+      }
+      if (error || !versionData) {
+        return <Box h="100%" />;
+      }
+      return (
+        <Box height="100%" overflow="hidden">
+            <Image
+              src={versionData["version-image-link"]}
+              width="100%"
+              height="100%"
+              fit="cover"
+            />
+            <Text
+              fontSize="4xl"
+              fontWeight="bold"
+              margin="-100px 70px 30px 80px"
+              color="whiteAlpha.900"
+            >
+              {`Java 版 ${versionData.title || version || "未知版本"}`}
+            </Text>
+        </Box>
+      );
+    }
+
     function getVersionCard() {
-      if (error) {
-        return (
+      if (error) { return (
           <Box
             borderWidth="1px"
             borderColor="red.400"
@@ -132,16 +197,10 @@ export function createMcVersionDetailPage(
           </Box>
         );
       }
-
-      if (loading) {
-        return (
-          <VStack align="stretch" spacing={3}>
-            <Skeleton height={headerImageHeight} />
-            <HStack spacing={3} align="top">
-              <Skeleton height="200px" width="32px" margin="10px 0 16px 20px" />
-              <Skeleton height="200px" width="100%" margin="10px 30px 50px 16px" />
-            </HStack>
-          </VStack>
+      if (loading) { return (
+           <SkeletonText noOfLines={4}
+           spacing='4' skeletonHeight='3'
+           mt="24px" ml="80px" mr="50px" />
         );
       }
 
@@ -159,76 +218,19 @@ export function createMcVersionDetailPage(
           </Box>
         );
       }
-
-      const officialLink =
-        typeof versionData["official-link"] === "string"
-          ? versionData["official-link"]
-          : null;
-      const wikiLink =
-        typeof versionData["wiki-link"] === "string"
-          ? versionData["wiki-link"]
-          : null;
       const markdown =
         typeof versionData.markdown === "string" ? versionData.markdown : null;
 
-      const floatingButtons: unknown[] = [];
-      if (officialLink) {
-        floatingButtons.push(
-          renderFloatingButton(
-            "official-link",
-            () => host.actions.openExternalLink(officialLink),
-            creeperIconPath,
-            "查看官网更新日志",
-            "124 124 900 900",
-          ),
-        );
-      }
-      if (wikiLink) {
-        floatingButtons.push(
-          renderFloatingButton(
-            "wiki-link",
-            () => host.actions.openExternalLink(wikiLink),
-            wikiIconPath,
-            "查看 Minecraft Wiki 上的更新日志",
-            "20 20 512 512",
-          ),
-        );
-      }
-
       return (
-        <VStack align="stretch" spacing={3}>
-          <Image
-            src={versionData["version-image-link"]}
-            height={headerImageHeight}
-            fit="cover"
-          />
-          <Text
-            fontSize="4xl"
-            fontWeight="bold"
-            margin="-115px 70px 60px 70px"
-            color="whiteAlpha.900"
-          >
-            {`Java 版 ${versionData.title || version || "未知版本"}`}
-          </Text>
-          <HStack spacing={3}>
-            <VStack
-              position="sticky"
-              top="64px"
-              zIndex={20}
-              alignSelf="flex-start"
-              ms="16px"
-            >
-              {floatingButtons}
-            </VStack>
+        <VStack align="stretch" spacing={3} mt="10px" ml="40px" mr="40px">
             <Box
-              className="markdown-preview"
-              fontSize="15px"
-              lineHeight={1.45}
-              margin="0 40px 50px 10px"
+                className="markdown-preview"
+                fontSize="15px"
+                lineHeight={1.45}
+                margin="0 0 40px 40px"
             >
-              {markdown ? parseMarkdown(api, markdown) : "无内容"}
+                {markdown ? parseMarkdown(api, markdown) : "无内容"}
             </Box>
-          </HStack>
         </VStack>
       );
     }
@@ -243,8 +245,13 @@ export function createMcVersionDetailPage(
           }}
         />
         <VStack align="stretch" spacing={3} p={0} h="100%">
-          <Box
+          <Grid
             p={0}
+            templateAreas={`"header header"
+                            "main nav"
+                            "footer nav"`}
+            gridTemplateRows={`150px 1fr auto`}
+            gridTemplateColumns={'1fr 64px'}
             h="100%"
             overflowY="auto"
             overflowX="hidden"
@@ -257,6 +264,9 @@ export function createMcVersionDetailPage(
               scrollRafRef.current = requestAnimationFrame(() => {
                 scrollRafRef.current = null;
                 setBackButtonOnImage((prevOnImage: boolean) => {
+                  if (scrollTop <= 2) {
+                    return true;
+                  }
                   if (prevOnImage) {
                     return scrollTop < backButtonSwitchScrollTop + backButtonHysteresis;
                   }
@@ -265,9 +275,30 @@ export function createMcVersionDetailPage(
               });
             }}
           >
-            {getVersionCard()}
-            <Footer margin="20px 20px 20px 70px" />
-          </Box>
+            <GridItem area={'header'}>
+                {getHeader()}
+            </GridItem>
+            <GridItem area={'main'}>
+                {getVersionCard()}
+            </GridItem>
+            <GridItem area={'nav'}>
+                <VStack
+                    position="sticky"
+                    top="80px"
+                    zIndex={20}
+                    alignSelf="flex-start"
+                    align="stretch"
+                    mt="24px"
+                    pl="8px"
+                    pr="16px"
+                >
+                    {getFloatingButtons()}
+                </VStack>
+            </GridItem>
+            <GridItem area={'footer'}>
+                <Footer margin="20px 20px 20px 70px" />
+            </GridItem>
+          </Grid>
         </VStack>
       </Box>
     );
