@@ -65,8 +65,8 @@ export function newsCardFactory(api: ExtensionFactoryApi) {
         onMouseLeave={() => setIsHovered(false)}
         onClick={action}
       >
-        <Grid templateColumns="160px minmax(0, 1fr)" gap={1} height="80px">
-          <Box height="80px" width="160px" overflow="hidden" borderRadius="0.375rem 0 0 0.375rem">
+        <Grid templateColumns="clamp(96px, 32%, 160px) minmax(0, 1fr)" gap={1} height="80px">
+          <Box height="80px" width="100%" overflow="hidden" borderRadius="0.375rem 0 0 0.375rem">
             <Image
               src={imgSrc}
               alt={title}
