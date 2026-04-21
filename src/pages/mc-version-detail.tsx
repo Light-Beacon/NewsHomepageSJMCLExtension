@@ -4,6 +4,7 @@ import type { ExtensionFactoryApi } from "../types/sjmcl";
 import { parseMarkdown } from "../utils/markdown-parser";
 import { navigate } from "../utils/page-router";
 import { getVersion } from "../utils/news-homepage-api";
+import { footerFactory } from "../components/footer";
 
 export function createMcVersionDetailPage(
   api: ExtensionFactoryApi,
@@ -13,6 +14,7 @@ export function createMcVersionDetailPage(
   const { Box, Text, VStack, HStack, Image, Skeleton, IconButton, Icon } =
     api.ChakraUI;
   const TopBackButton = topBackButtonFactory(api);
+  const Footer = footerFactory(api);
   const headerImageHeight = "160px";
   const backButtonSwitchScrollTop = 120;
   const backButtonHysteresis = 24;
@@ -259,6 +261,7 @@ export function createMcVersionDetailPage(
             }}
           >
             {getVersionCard()}
+            <Footer margin="20px 20px 20px 70px" />
           </Box>
         </VStack>
       </Box>
