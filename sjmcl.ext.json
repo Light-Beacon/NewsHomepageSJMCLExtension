@@ -3,7 +3,7 @@
   "name": "新闻主页扩展",
   "description": "在 SJMCL 提供最新的 MC 资讯！",
   "author": "Nattiden",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "minimalLauncherVersion": "1.0.0-beta.4",
   "frontend": {
     "entry": "frontend/index.js"
