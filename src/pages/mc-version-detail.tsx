@@ -174,7 +174,7 @@ export function createMcVersionDetailPage(
             <Text
               fontSize="4xl"
               fontWeight="bold"
-              margin="-100px 70px 30px 80px"
+              margin="-100px 70px 30px 104px"
               color="whiteAlpha.900"
             >
               {`Java 版 ${versionData.title || version || "未知版本"}`}
@@ -200,7 +200,7 @@ export function createMcVersionDetailPage(
       if (loading) { return (
            <SkeletonText noOfLines={4}
            spacing='4' skeletonHeight='3'
-           mt="24px" ml="80px" mr="50px" />
+           mt="24px" />
         );
       }
 
@@ -222,12 +222,11 @@ export function createMcVersionDetailPage(
         typeof versionData.markdown === "string" ? versionData.markdown : null;
 
       return (
-        <VStack align="stretch" spacing={3} mt="10px" ml="40px" mr="40px">
+        <VStack align="stretch" spacing={3} mt="10px">
             <Box
                 className="markdown-preview"
                 fontSize="15px"
                 lineHeight={1.45}
-                margin="0 0 40px 40px"
             >
                 {markdown ? parseMarkdown(api, markdown) : "无内容"}
             </Box>
@@ -248,10 +247,10 @@ export function createMcVersionDetailPage(
           <Grid
             p={0}
             templateAreas={`"header header"
-                            "main nav"
-                            "footer nav"`}
+                            "nav main"
+                            "nav footer"`}
             gridTemplateRows={`150px 1fr auto`}
-            gridTemplateColumns={'1fr 64px'}
+            gridTemplateColumns={'64px 1fr'}
             h="100%"
             overflowY="auto"
             overflowX="hidden"
@@ -278,7 +277,7 @@ export function createMcVersionDetailPage(
             <GridItem area={'header'}>
                 {getHeader()}
             </GridItem>
-            <GridItem area={'main'}>
+            <GridItem area={'main'} ml="40px" mr="80px">
                 {getVersionCard()}
             </GridItem>
             <GridItem area={'nav'}>
@@ -289,14 +288,14 @@ export function createMcVersionDetailPage(
                     alignSelf="flex-start"
                     align="stretch"
                     mt="24px"
-                    pl="8px"
-                    pr="16px"
+                    pl="16px"
+                    pr="8px"
                 >
                     {getFloatingButtons()}
                 </VStack>
             </GridItem>
             <GridItem area={'footer'}>
-                <Footer margin="20px 20px 20px 70px" />
+                <Footer margin="20px 20px 20px 20px" />
             </GridItem>
           </Grid>
         </VStack>

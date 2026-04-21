@@ -20,7 +20,7 @@ export function topBackButtonFactory(api: ExtensionFactoryApi) {
       <VStack
         position="fixed"
         top="16px"
-        right="16px"
+        left="16px"
         zIndex={30}
       >
         <Box position="relative" overflow="hidden" borderRadius="md">
@@ -41,7 +41,7 @@ export function topBackButtonFactory(api: ExtensionFactoryApi) {
                 aria-label={ariaLabel}
                 variant="ghost"
                 icon={
-                    <Icon viewBox="2 2 22 22">
+                    <Icon viewBox="2 2 20 20">
                     {React.createElement("path", {
                         fill: "currentColor",
                         d: backIconPath,
