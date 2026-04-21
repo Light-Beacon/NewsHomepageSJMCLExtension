@@ -9,7 +9,7 @@ type TopBackButtonProps = {
 
 export function topBackButtonFactory(api: ExtensionFactoryApi) {
   const React = api.React;
-  const { Box, IconButton, Icon, useColorModeValue } = api.ChakraUI;
+  const { Box, IconButton, Icon, Tooltip, useColorModeValue } = api.ChakraUI;
   return function TopBackButton({
     onClick,
     onImage,
@@ -34,6 +34,7 @@ export function topBackButtonFactory(api: ExtensionFactoryApi) {
           pointerEvents="none"
         />
         <Box position="relative">
+        <Tooltip hasArrow label="返回" placement='right'>
           <IconButton
             size="sm"
             aria-label={ariaLabel}
@@ -49,6 +50,7 @@ export function topBackButtonFactory(api: ExtensionFactoryApi) {
             }
             onClick={onClick}
           />
+          </Tooltip>
         </Box>
       </Box>
     );

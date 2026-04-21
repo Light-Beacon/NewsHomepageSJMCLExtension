@@ -11,7 +11,7 @@ export function createMcVersionDetailPage(
   standalone: boolean,
 ) {
   const React = api.React;
-  const { Box, Text, VStack, HStack, Image, Skeleton, IconButton, Icon } =
+  const { Box, Text, VStack, HStack, Image, Skeleton, IconButton, Icon, Tooltip } =
     api.ChakraUI;
   const TopBackButton = topBackButtonFactory(api);
   const Footer = footerFactory(api);
@@ -92,25 +92,28 @@ export function createMcVersionDetailPage(
       key: string,
       onClick: () => void,
       iconPath: string,
+      tooltip = "",
       viewBox = "0 0 512 512",
     ) {
       return (
-        <IconButton
-          key={key}
-          size="sm"
-          aria-label="返回"
-          variant="ghost"
-          icon={
-            <Icon viewBox={viewBox}>
-              {React.createElement("path", {
-                fill: "currentColor",
-                stroke: "currentColor",
-                d: iconPath,
-              })}
-            </Icon>
-          }
-          onClick={onClick}
-        />
+        <Tooltip hasArrow label={tooltip} placement='right'>
+            <IconButton
+            key={key}
+            size="sm"
+            aria-label="返回"
+            variant="ghost"
+            icon={
+                <Icon viewBox={viewBox}>
+                {React.createElement("path", {
+                    fill: "currentColor",
+                    stroke: "currentColor",
+                    d: iconPath,
+                })}
+                </Icon>
+            }
+            onClick={onClick}
+            />
+        </Tooltip>
       );
     }
 
@@ -175,6 +178,7 @@ export function createMcVersionDetailPage(
             "official-link",
             () => host.actions.openExternalLink(officialLink),
             creeperIconPath,
+            "查看官网更新日志",
             "124 124 900 900",
           ),
         );
@@ -185,6 +189,7 @@ export function createMcVersionDetailPage(
             "wiki-link",
             () => host.actions.openExternalLink(wikiLink),
             wikiIconPath,
+            "查看 Minecraft Wiki 上的更新日志",
             "20 20 512 512",
           ),
         );
