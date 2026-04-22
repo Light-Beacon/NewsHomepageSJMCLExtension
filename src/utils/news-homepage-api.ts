@@ -55,3 +55,9 @@ export async function getVersion(sjmcl_api: ExtensionFactoryApi,
     version: string, onSuccess?: Function, onError?: Function, useCache = true) {
         return gernal_api_get(sjmcl_api, "mcversion/version/" + version, onSuccess, onError, useCache);
 }
+
+export function clearCache() {
+    for (const key in cache) {
+        delete cache[key];
+    }
+}

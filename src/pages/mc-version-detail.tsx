@@ -200,7 +200,7 @@ export function createMcVersionDetailPage(
       if (loading) { return (
            <SkeletonText noOfLines={4}
            spacing='4' skeletonHeight='3'
-           mt="24px" />
+           mt="8px" />
         );
       }
 
@@ -277,7 +277,7 @@ export function createMcVersionDetailPage(
             <GridItem area={'header'}>
                 {getHeader()}
             </GridItem>
-            <GridItem area={'main'} ml="40px" mr="80px">
+            <GridItem area={'main'} ml="40px" mr="80px" mt="16px">
                 {getVersionCard()}
             </GridItem>
             <GridItem area={'nav'}>
