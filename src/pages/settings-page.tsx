@@ -2,8 +2,12 @@ import type { ExtensionFactoryApi } from "../types/sjmcl";
 import { checkVersionSupport } from "../utils/version-check";
 import { footerFactory } from "../components/footer";
 import { clearCache } from "../utils/news-homepage-api";
+import { createUpdateCheckCard } from "../components/update-check-card";
+import { getExtensionVersion } from "../utils/updater";
+
 
 export function createSettingsPage(api: ExtensionFactoryApi) {
+  const UpdateCheckCard = createUpdateCheckCard(api);
   const React = api.React;
   const {
     Box,
@@ -37,21 +41,20 @@ export function createSettingsPage(api: ExtensionFactoryApi) {
       >
         <GridItem area={"main"}>
           <VStack spacing="4" align="stretch">
-            <Box>
-              {checkVersionSupport(launcherVersion).map((action, index) => (
-                <Alert status={action.type} key={index} borderRadius="md">
-                  <AlertIcon />
-                  <Box>
-                    <AlertTitle>
-                      {action.type === "warning" ? "警告" : "提示"}
-                    </AlertTitle>
-                    <AlertDescription>
-                      {action.description.replace("{version}", launcherVersion)}
-                    </AlertDescription>
-                  </Box>
-                </Alert>
-              ))}
-            </Box>
+            {checkVersionSupport(launcherVersion).map((action, index) => (
+              <Alert status={action.type} key={index} borderRadius="md">
+                <AlertIcon />
+                <Box>
+                  <AlertTitle>
+                    {action.type === "warning" ? "警告" : "提示"}
+                  </AlertTitle>
+                  <AlertDescription>
+                    {action.description.replace("{version}", launcherVersion)}
+                  </AlertDescription>
+                </Box>
+              </Alert>
+            ))}
+            <UpdateCheckCard/>
             <Card padding="20px 30px">
               <VStack spacing="4" align="stretch">
                 <Text fontSize="lg" fontWeight="bold">
@@ -59,7 +62,7 @@ export function createSettingsPage(api: ExtensionFactoryApi) {
                 </Text>
                 <Wrap spacing='10px'>
                   <WrapItem>
-                    <Button size= "md"
+                    <Button size= "sm"
                       variant= "outline"
                       title= "清除缓存"
                       onClick= { () => {
@@ -67,7 +70,7 @@ export function createSettingsPage(api: ExtensionFactoryApi) {
                       }}>清除缓存</Button>
                   </WrapItem>
                   <WrapItem>
-                    <Button size= "md"
+                    <Button size= "sm"
                       variant= "outline"
                       title= "重新加载扩展"
                       onClick= { () => {
@@ -80,7 +83,7 @@ export function createSettingsPage(api: ExtensionFactoryApi) {
           </VStack>
         </GridItem>
         <GridItem area={"footer"}>
-          <Footer margin="0" />
+          <Footer margin="0" license={null} info={`当前插件版本：${getExtensionVersion()}`} />
         </GridItem>
       </Grid>
     );

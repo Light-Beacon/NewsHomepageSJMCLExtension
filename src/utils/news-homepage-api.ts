@@ -1,6 +1,6 @@
 import type { ExtensionFactoryApi } from "../types/sjmcl";
 
-const apiuri = "http://news.bugjump.net/api/v1/";
+const apiuri = "https://news.bugjump.net/api/v1/";
 
 async function api_get(sjmcl_api: ExtensionFactoryApi, path: string) {
     const host = sjmcl_api.getHostContext();

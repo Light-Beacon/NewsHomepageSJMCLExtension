@@ -4,7 +4,7 @@ import { createSettingsPage } from "./pages/settings-page";
 import { createNewsWidget } from "./widgets/news";
 import { createConsoleWidget } from "./widgets/console";
 
-const debugMode = true;
+const debugMode = false;
 
 (function registerExampleExtension(factory) {
   const token = document.currentScript?.dataset?.extensionToken || "";

@@ -254,6 +254,9 @@ async function main() {
     jsxFactory: "React.createElement",
     jsxFragment: "React.Fragment",
     logLevel: "info",
+    define: {
+      __EXT_VERSION__: JSON.stringify(version),
+    },
   });
 
   const outputFile = buildResult.outputFiles?.[0];

@@ -252,6 +252,9 @@ async function main() {
     jsx: "transform",
     jsxFactory: "React.createElement",
     jsxFragment: "React.Fragment",
+    define: {
+      __EXT_VERSION__: JSON.stringify(version),
+    },
     logLevel: "info",
   });
 
