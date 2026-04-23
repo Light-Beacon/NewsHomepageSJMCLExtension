@@ -47,9 +47,9 @@ export function createUpdateCheckCard(api: ExtensionFactoryApi) {
 			status = "warning";
 			title = `发现了新的插件版本：${latestVersion.id}`;
 			actions = [
-				<Button key="open-update-log" size="sm" variant="outline" isDisabled>
+				/*<Button key="open-update-log" size="sm" variant="outline" isDisabled>
 					阅读更新日志
-				</Button>,
+				</Button>,*/
 				<Button key="update-extension" size="sm" variant="outline"
                     onClick={() => {
                         setState({ kind: "updating", version: latestVersion });
